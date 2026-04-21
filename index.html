@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Dr. Mahfoud Amara — Digital Research Ecosystem. Associate Professor of Sport Social Sciences, Qatar University. Research on sport, geopolitics, identity and policy in the MENA region." />
+  <meta name="author" content="Dr. Mahfoud Amara" />
+  <meta property="og:title" content="Dr. Mahfoud Amara — Digital Research Ecosystem" />
+  <meta property="og:description" content="Five interconnected research platforms on sport, geopolitics and identity in the Arab world and beyond." />
+  <meta property="og:type" content="website" />
+  <title>Dr. Mahfoud Amara — Digital Research Ecosystem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    /* ── Design tokens ── */
+    :root {
+      --gold:         #C9A84C;
+      --gold-light:   #E2C97E;
+      --gold-pale:    #F5EDD3;
+      --ink:          #131008;
+      --ink-mid:      #1E1710;
+      --parchment:    #FAF6EE;
+      --parchment-dim: rgba(242,234,218,0.65);
+      --parchment-muted: rgba(242,234,218,0.4);
+      --border:       rgba(201,168,76,0.22);
+      --border-mid:   rgba(201,168,76,0.38);
+      --border-strong: rgba(201,168,76,0.55);
+      --gold-glow:    rgba(201,168,76,0.06);
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body:    'DM Sans', system-ui, sans-serif;
+      --transition:   0.22s ease;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--ink);
+      color: var(--parchment);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Geometric background ── */
+    .geo-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 1;
+    }
+
+    /* ── Layout shell ── */
+    .shell {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      min-height: 100vh;
+      border-left: 0.5px solid var(--border);
+      border-right: 0.5px solid var(--border);
+    }
+
+    /* ── Header ── */
+    .site-header {
+      padding: 2.5rem 2.5rem 2rem;
+      border-bottom: 0.5px solid var(--border);
+      position: relative;
+    }
+
+    .header-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-eyebrow::after {
+      content: '';
+      flex: 1;
+      height: 0.5px;
+      background: var(--border-mid);
+    }
+
+    .site-title {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 5vw, 38px);
+      font-weight: 600;
+      color: var(--gold-light);
+      letter-spacing: 0.02em;
+      line-height: 1.15;
+    }
+
+    .site-title .honorific {
+      font-weight: 400;
+      font-style: italic;
+      font-size: 0.8em;
+      color: rgba(226,201,126,0.65);
+    }
+
+    .site-subtitle {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--parchment-muted);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-top: 8px;
+      line-height: 1.6;
+    }
+
+    .tag-row {
+      display: flex;
+      gap: 7px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.09em;
+      padding: 4px 10px;
+      border: 0.5px solid var(--border-strong);
+      color: var(--gold);
+      text-transform: uppercase;
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .tag:hover { background: var(--gold-glow); }
+
+    /* ── Navigation ── */
+    .site-nav {
+      display: flex;
+      border-bottom: 0.5px solid var(--border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .site-nav::-webkit-scrollbar { display: none; }
+
+    .nav-btn {
+      flex-shrink: 0;
+      padding: 12px 20px;
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--parchment-muted);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: color var(--transition), border-color var(--transition), background var(--transition);
+      white-space: nowrap;
+    }
+
+    .nav-btn:hover { color: var(--gold-light); background: var(--gold-glow); }
+    .nav-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+    /* ── Panels ── */
+    .panel { display: none; padding: 2rem 2.5rem; animation: fadeIn 0.25s ease; }
+    .panel.active { display: block; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border-bottom: 0.5px solid var(--border);
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+    }
+
+    /* ══════════════════════════════
+       PANEL: PLATFORMS
+    ══════════════════════════════ */
+    .platforms-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 560px) {
+      .platforms-grid { grid-template-columns: 1fr; }
+      .platform-card.full-width { grid-column: auto; }
+    }
+
+    .platform-card {
+      border: 0.5px solid var(--border);
+      padding: 1.2rem;
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+      transition: border-color var(--transition), background var(--transition);
+    }
+
+    .platform-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1.5px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      transform: scaleX(0);
+      transition: transform 0.35s ease;
+    }
+
+    .platform-card:hover {
+      border-color: var(--border-strong);
+      background: var(--gold-glow);
+    }
+
+    .platform-card:hover::before { transform: scaleX(1); }
+
+    .platform-card.full-width { grid-column: 1 / -1; }
+
+    .platform-num {
+      font-family: var(--font-display);
+      font-size: 36px;
+      color: rgba(201,168,76,0.12);
+      font-weight: 600;
+      line-height: 1;
+      position: absolute;
+      top: 10px; right: 14px;
+      pointer-events: none;
+    }
+
+    .platform-region {
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 5px;
+    }
+
+    .platform-name {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--parchment);
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    .platform-desc {
+      font-size: 11px;
+      color: var(--parchment-muted);
+      line-height: 1.6;
+    }
+
+    .platform-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 12px;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      text-decoration: none;
+      text-transform: uppercase;
+      border-bottom: 0.5px solid transparent;
+      transition: border-color var(--transition);
+    }
+
+    .platform-link:hover { border-bottom-color: var(--gold); }
+
+    /* ══════════════════════════════
+       PANEL: RESEARCH
+    ══════════════════════════════ */
+    .research-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .research-item {
+      border: 0.5px solid var(--border);
+      padding: 1.1rem 1.2rem;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      transition: border-color var(--transition), background var(--transition);
+    }
+
+    .research-item:hover {
+      border-color: var(--border-strong);
+      background: var(--gold-glow);
+    }
+
+    .research-num {
+      font-family: var(--font-display);
+      font-size: 22px;
+      color: var(--gold);
+      font-weight: 600;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 30px;
+      text-align: right;
+      padding-top: 2px;
+    }
+
+    .research-theme {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--parchment);
+      line-height: 1.4;
+    }
+
+    .research-keywords {
+      font-size: 11px;
+      color: var(--parchment-muted);
+      margin-top: 4px;
+      line-height: 1.6;
+    }
+
+    .research-frameworks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 8px;
+    }
+
+    .framework-tag {
+      font-size: 9px;
+      padding: 2px 7px;
+      border: 0.5px solid var(--border-mid);
+      color: rgba(201,168,76,0.7);
+      letter-spacing: 0.06em;
+    }
+
+    /* ══════════════════════════════
+       PANEL: PROFILE
+    ══════════════════════════════ */
+    .positioning-quote {
+      border-left: 2px solid var(--gold);
+      padding: 14px 18px;
+      background: var(--gold-glow);
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-style: italic;
+      color: rgba(242,234,218,0.82);
+      line-height: 1.75;
+      margin-bottom: 2rem;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 2rem;
+    }
+
+    .stat-box {
+      border: 0.5px solid var(--border);
+      padding: 14px 10px;
+      text-align: center;
+      transition: border-color var(--transition), background var(--transition);
+    }
+
+    .stat-box:hover { border-color: var(--border-strong); background: var(--gold-glow); }
+
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: 32px;
+      color: var(--gold);
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      color: var(--parchment-muted);
+      text-transform: uppercase;
+      margin-top: 5px;
+    }
+
+    .profile-section { margin-bottom: 2rem; }
+
+    .role-list { display: flex; flex-direction: column; }
+
+    .role-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--parchment-dim);
+      padding: 9px 0;
+      border-bottom: 0.5px solid rgba(201,168,76,0.08);
+      line-height: 1.5;
+    }
+
+    .role-dot {
+      width: 5px; height: 5px;
+      background: var(--gold);
+      flex-shrink: 0;
+      border-radius: 0;
+    }
+
+    .identity-block {
+      background: var(--ink-mid);
+      border: 0.5px solid var(--border);
+      padding: 1.2rem;
+      margin-top: 1rem;
+    }
+
+    .identity-block p {
+      font-size: 12px;
+      color: var(--parchment-dim);
+      line-height: 1.8;
+    }
+
+    .identity-block strong {
+      color: var(--gold);
+      font-weight: 500;
+    }
+
+    /* ══════════════════════════════
+       PANEL: CONNECT
+    ══════════════════════════════ */
+    .connect-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .connect-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 16px;
+      border: 0.5px solid var(--border);
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color var(--transition), background var(--transition);
+      gap: 12px;
+    }
+
+    .connect-item:hover {
+      border-color: var(--border-strong);
+      background: var(--gold-glow);
+    }
+
+    .connect-label {
+      font-size: 10px;
+      color: var(--parchment-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      flex-shrink: 0;
+      min-width: 140px;
+    }
+
+    .connect-value {
+      font-size: 12px;
+      color: var(--gold-light);
+      flex: 1;
+    }
+
+    .connect-arrow {
+      font-size: 13px;
+      color: rgba(201,168,76,0.4);
+      flex-shrink: 0;
+    }
+
+    .connect-divider {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--parchment-muted);
+      padding: 6px 0 4px;
+      border-bottom: 0.5px solid var(--border);
+      margin: 6px 0 2px;
+    }
+
+    /* ── Footer ── */
+    .site-footer {
+      border-top: 0.5px solid var(--border);
+      padding: 1.5rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .footer-copy {
+      font-size: 10px;
+      color: var(--parchment-muted);
+      letter-spacing: 0.08em;
+    }
+
+    .footer-langs {
+      display: flex;
+      gap: 8px;
+    }
+
+    .footer-langs span {
+      font-size: 10px;
+      color: rgba(201,168,76,0.5);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .site-header { padding: 1.75rem 1.25rem 1.5rem; }
+      .panel { padding: 1.5rem 1.25rem; }
+      .site-footer { padding: 1.25rem; }
+      .stat-grid { grid-template-columns: repeat(3, 1fr); }
+      .connect-label { min-width: 100px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Geometric background SVG -->
+<svg class="geo-canvas" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(201,168,76,0.04)" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#grid)" />
+  <!-- Star polygon top-right -->
+  <g transform="translate(calc(100% - 80px), 100)" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.1">
+    <polygon points="0,-80 46,-23 74,62 0,100 -74,62 -46,-23"/>
+    <polygon points="0,-80 46,-23 74,62 0,100 -74,62 -46,-23" transform="rotate(30 0 0)"/>
+    <polygon points="0,-80 46,-23 74,62 0,100 -74,62 -46,-23" transform="rotate(60 0 0)"/>
+    <circle r="60" stroke-dasharray="3 5"/>
+  </g>
+  <!-- Star polygon bottom-left -->
+  <g transform="translate(80, calc(100% - 80px))" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.07">
+    <polygon points="0,-56 32,-16 52,44 0,70 -52,44 -32,-16"/>
+    <polygon points="0,-56 32,-16 52,44 0,70 -52,44 -32,-16" transform="rotate(30 0 0)"/>
+    <polygon points="0,-56 32,-16 52,44 0,70 -52,44 -32,-16" transform="rotate(60 0 0)"/>
+  </g>
+  <!-- Horizontal rule -->
+  <line x1="0" y1="220" x2="100%" y2="220" stroke="#C9A84C" stroke-width="0.3" opacity="0.07"/>
+</svg>
+
+<!-- Main shell -->
+<div class="shell">
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-eyebrow">Digital Research Ecosystem</div>
+    <h1 class="site-title">
+      <span class="honorific">Dr.</span> Mahfoud Amara
+    </h1>
+    <p class="site-subtitle">
+      Associate Professor · College of Sport Sciences · Qatar University
+    </p>
+    <div class="tag-row">
+      <span class="tag">Sport &amp; Geopolitics</span>
+      <span class="tag">MENA</span>
+      <span class="tag">Olympic Studies</span>
+      <span class="tag">Sport Policy</span>
+      <span class="tag">EN · AR · FR</span>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="site-nav" role="navigation" aria-label="Main sections">
+    <button class="nav-btn active" onclick="showPanel('platforms', this)" aria-selected="true">Platforms</button>
+    <button class="nav-btn" onclick="showPanel('research', this)">Research</button>
+    <button class="nav-btn" onclick="showPanel('profile', this)">Profile</button>
+    <button class="nav-btn" onclick="showPanel('connect', this)">Connect</button>
+  </nav>
+
+  <!-- ══ PANEL: PLATFORMS ══ -->
+  <section id="panel-platforms" class="panel active" aria-label="Research platforms">
+    <div class="platforms-grid">
+
+      <div class="platform-card">
+        <span class="platform-num" aria-hidden="true">01</span>
+        <div class="platform-region">Qatar · GCC</div>
+        <div class="platform-name">The Corniche Walk</div>
+        <p class="platform-desc">Sport, culture and everyday life in Qatar and the Gulf — connecting urban practice, mega-events and national identity.</p>
+        <a class="platform-link" href="https://mahfoudm33.github.io" target="_blank" rel="noopener">
+          Visit platform ↗
+        </a>
+      </div>
+
+      <div class="platform-card">
+        <span class="platform-num" aria-hidden="true">02</span>
+        <div class="platform-region">Algeria · North Africa</div>
+        <div class="platform-name">Sport &amp; Algerian Studies</div>
+        <p class="platform-desc">Postcolonial sport, national identity and historical narrative — from independence to the contemporary Algerian sporting landscape.</p>
+        <a class="platform-link" href="https://mahfoudm33.github.io" target="_blank" rel="noopener">
+          Visit platform ↗
+        </a>
+      </div>
+
+      <div class="platform-card">
+        <span class="platform-num" aria-hidden="true">03</span>
+        <div class="platform-region">Arab World</div>
+        <div class="platform-name">Sport in the Arab World</div>
+        <p class="platform-desc">Regional sport governance, media framing and geopolitical dynamics — situating Arab sport within global power structures.</p>
+        <a class="platform-link" href="https://mahfoudm33.github.io" target="_blank" rel="noopener">
+          Visit platform ↗
+        </a>
+      </div>
+
+      <div class="platform-card">
+        <span class="platform-num" aria-hidden="true">04</span>
+        <div class="platform-region">Islam · Muslim Communities</div>
+        <div class="platform-name">Sport in Islam</div>
+        <p class="platform-desc">Ethics, gender and embodied practice in Muslim societies — foregrounding local epistemologies against homogenised narratives.</p>
+        <a class="platform-link" href="https://mahfoudm33.github.io" target="_blank" rel="noopener">
+          Visit platform ↗
+        </a>
+      </div>
+
+      <div class="platform-card full-width">
+        <span class="platform-num" aria-hidden="true">05</span>
+        <div class="platform-region">Media Archive</div>
+        <div class="platform-name">The Peninsula Archive</div>
+        <p class="platform-desc">A curated archive of press, broadcast and public discourse — Al Jazeera, Le Monde, BBC Arabic, La Vanguardia, The Conversation and beyond. Documenting how sport in the Arab world is narrated, contested and represented across global media.</p>
+        <a class="platform-link" href="https://mahfoudm33.github.io" target="_blank" rel="noopener">
+          Visit archive ↗
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ PANEL: RESEARCH ══ -->
+  <section id="panel-research" class="panel" aria-label="Research themes">
+    <div class="research-list">
+
+      <div class="research-item">
+        <div class="research-num">1</div>
+        <div>
+          <div class="research-theme">Sport, power &amp; geopolitics</div>
+          <div class="research-keywords">Regional agency · Soft power · Sportswashing critique · Qatar 2022 · FIFA · Mega-events</div>
+          <div class="research-frameworks">
+            <span class="framework-tag">Nye (soft power)</span>
+            <span class="framework-tag">Bourdieu (field theory)</span>
+            <span class="framework-tag">Political economy</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="research-item">
+        <div class="research-num">2</div>
+        <div>
+          <div class="research-theme">Sport, identity &amp; nation-building</div>
+          <div class="research-keywords">Biographical methods · Socio-historical analysis · MENA nationalisms · Algeria · Morocco · Gulf states</div>
+          <div class="research-frameworks">
+            <span class="framework-tag">Biographical method</span>
+            <span class="framework-tag">Historical sociology</span>
+            <span class="framework-tag">Elias (figuration)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="research-item">
+        <div class="research-num">3</div>
+        <div>
+          <div class="research-theme">Media, discourse &amp; counter-narratives</div>
+          <div class="research-keywords">Critical discourse analysis · Framing theory · Said · Orientalism critique · Arab media · Al Jazeera</div>
+          <div class="research-frameworks">
+            <span class="framework-tag">CDA</span>
+            <span class="framework-tag">Said (Orientalism)</span>
+            <span class="framework-tag">Framing theory</span>
+            <span class="framework-tag">Postcolonial theory</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="research-item">
+        <div class="research-num">4</div>
+        <div>
+          <div class="research-theme">Sport development, ethics &amp; governance</div>
+          <div class="research-keywords">Anti-doping policy · WADA · IOC · Mega-event legacies · Sport integrity · GCC governance</div>
+          <div class="research-frameworks">
+            <span class="framework-tag">Governance theory</span>
+            <span class="framework-tag">Policy analysis</span>
+            <span class="framework-tag">IOC/WADA frameworks</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="research-item">
+        <div class="research-num">5</div>
+        <div>
+          <div class="research-theme">Gender &amp; local epistemologies in MENA</div>
+          <div class="research-keywords">Decolonial feminism · Sehlikoglu · Postcolonial theory · Local voices · Women in sport · Muslim women</div>
+          <div class="research-frameworks">
+            <span class="framework-tag">Decolonial feminism</span>
+            <span class="framework-tag">Sehlikoglu</span>
+            <span class="framework-tag">Chakrabarty</span>
+            <span class="framework-tag">Critical theory</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ PANEL: PROFILE ══ -->
+  <section id="panel-profile" class="panel" aria-label="Academic profile">
+
+    <div class="positioning-quote">
+      "Dr. Mahfoud Amara's work is distinguished by its ability to bridge global and local knowledge systems, combining critical theoretical insight with empirical depth to reposition sport as a key site for understanding power, identity, and geopolitical transformation in the MENA region and beyond."
+    </div>
+
+    <div class="profile-section">
+      <div class="section-label">Academic record</div>
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="stat-number">22</div>
+          <div class="stat-label">Keynotes</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">24</div>
+          <div class="stat-label">Int'l papers</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">5</div>
+          <div class="stat-label">Platforms</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <div class="section-label">Current roles &amp; affiliations</div>
+      <div class="role-list">
+        <div class="role-item"><span class="role-dot"></span>Associate Professor of Sport Social Sciences, Qatar University — College of Sport Sciences</div>
+        <div class="role-item"><span class="role-dot"></span>Reviewer — IOC Olympic Studies Centre Grants Committee</div>
+        <div class="role-item"><span class="role-dot"></span>External Examiner — Loughborough University, UK</div>
+        <div class="role-item"><span class="role-dot"></span>External Examiner — University of Bordeaux, France</div>
+        <div class="role-item"><span class="role-dot"></span>Invited Speaker — University of Michigan, USA</div>
+        <div class="role-item"><span class="role-dot"></span>Institutional Collaborator — QADA · QOC</div>
+        <div class="role-item"><span class="role-dot"></span>Research Funding Reviewer — Canada · Netherlands</div>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <div class="section-label">Scholarly identity</div>
+      <div class="identity-block">
+        <p>A <strong>transnational bridge scholar</strong> operating across Algeria / North Africa, the UK / Western academia, and Qatar / the Gulf — functioning as a knowledge broker who translates concepts across <strong>Arabic, English and French</strong> and across academic traditions. The distinctive scholarly identity centres on who produces knowledge, whose narratives are legitimised, and how global hierarchies shape the interpretation of sport in Arab and Muslim societies.</p>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <div class="section-label">Languages of scholarship</div>
+      <div class="tag-row">
+        <span class="tag">English</span>
+        <span class="tag">عربي</span>
+        <span class="tag">Français</span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══ PANEL: CONNECT ══ -->
+  <section id="panel-connect" class="panel" aria-label="Connect and resources">
+
+    <div class="section-label">Platforms &amp; presence</div>
+    <div class="connect-list">
+      <a class="connect-item" href="https://mahfoudm33.github.io" target="_blank" rel="noopener">
+        <span class="connect-label">GitHub Hub</span>
+        <span class="connect-value">mahfoudm33.github.io</span>
+        <span class="connect-arrow">↗</span>
+      </a>
+      <a class="connect-item" href="https://www.qu.edu.qa" target="_blank" rel="noopener">
+        <span class="connect-label">Qatar University</span>
+        <span class="connect-value">Faculty Profile — College of Sport Sciences</span>
+        <span class="connect-arrow">↗</span>
+      </a>
+    </div>
+
+    <div class="connect-divider" style="margin-top:1.5rem;">Academic resources</div>
+    <div class="connect-list" style="margin-top:10px;">
+      <a class="connect-item" href="https://www.routledge.com" target="_blank" rel="noopener">
+        <span class="connect-label">Publications</span>
+        <span class="connect-value">Routledge · Scopus / WoS indexed journals</span>
+        <span class="connect-arrow">↗</span>
+      </a>
+      <a class="connect-item" href="https://olympics.com/ioc/olympic-studies-centre" target="_blank" rel="noopener">
+        <span class="connect-label">IOC Olympic Studies</span>
+        <span class="connect-value">Grants Committee Reviewer</span>
+        <span class="connect-arrow">↗</span>
+      </a>
+    </div>
+
+    <div class="connect-divider" style="margin-top:1.5rem;">Media coverage</div>
+    <div class="connect-list" style="margin-top:10px;">
+      <div class="connect-item" style="cursor:default;">
+        <span class="connect-label">Featured in</span>
+        <span class="connect-value">Al Jazeera · Le Monde · BBC · La Vanguardia · The Conversation</span>
+        <span class="connect-arrow"></span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <span class="footer-copy">© Dr. Mahfoud Amara · Qatar University · Digital Research Ecosystem</span>
+    <div class="footer-langs">
+      <span>EN</span>
+      <span>·</span>
+      <span>AR</span>
+      <span>·</span>
+      <span>FR</span>
+    </div>
+  </footer>
+
+</div><!-- /shell -->
+
+<script>
+  function showPanel(name, btn) {
+    document.querySelectorAll('.panel').forEach(p => {
+      p.classList.remove('active');
+      p.removeAttribute('aria-selected');
+    });
+    document.querySelectorAll('.nav-btn').forEach(b => {
+      b.classList.remove('active');
+      b.removeAttribute('aria-selected');
+    });
+    document.getElementById('panel-' + name).classList.add('active');
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+  }
+
+  // Add your photo: place amara.jpg in the same folder as this file,
+  // then uncomment the lines below and add <img> to the header.
+  //
+  // const img = document.createElement('img');
+  // img.src = 'amara.jpg';
+  // img.alt = 'Dr. Mahfoud Amara';
+  // img.style.cssText = 'width:70px;height:70px;object-fit:cover;object-position:center top;border:1px solid rgba(201,168,76,0.5);margin-bottom:1rem;display:block;';
+  // document.querySelector('.site-header').prepend(img);
+</script>
+
+</body>
+</html>
