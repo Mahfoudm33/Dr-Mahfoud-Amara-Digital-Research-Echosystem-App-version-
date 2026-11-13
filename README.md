@@ -6,7 +6,7 @@
 
 ## Overview
 
-This repository hosts the **Digital Research Ecosystem** of Dr. Mahfoud Amara, Associate Professor of Sport Social Sciences and Management at the College of Sport Sciences, Qatar University.
+This repository hosts the **Digital Research Ecosystem** of Dr. Mahfoud Amara, Associate Professor in Sport Management and Social Sciences at the College of Sport Sciences, Qatar University.
 
 The ecosystem is a network of five interconnected GitHub Pages platforms, unified through a central hub application (`index.html`). It functions as an open, publicly accessible scholarly infrastructure — bringing together research outputs, thematic platforms, media coverage, and academic resources in a single navigable interface.
 
@@ -109,10 +109,10 @@ When each sub-platform repo is ready, update the `href` attribute on each platfo
 
 ```html
 <!-- Before -->
-<a class="platform-link" href="https://mahfoudm33.github.io" target="_blank">
+<a class="platform-link" href="https://mahfoudm33.github.io/Digital-Research-Ecosystem-Project/" target="_blank">
 
 <!-- After (example) -->
-<a class="platform-link" href="https://mahfoudm33.github.io/corniche-walk" target="_blank">
+<a class="platform-link" href="https://mahfoudm33.github.io/Sport-in-Qatar-Research-Project/" target="_blank">
 ```
 
 ---
@@ -144,7 +144,7 @@ To embed the app inside an existing GitHub Pages site rather than replacing the 
 
 ### Institutional roles
 
-- Associate Professor of Sport Social Sciences and Management, Qatar University
+- Associate Professor in Sport Management and Social Sciences, Qatar University
 - Reviewer, IOC Olympic Studies Centre Grants Committee
 - External Examiner, Loughborough University (UK)
 - External Examiner, University of Bordeaux (France)
